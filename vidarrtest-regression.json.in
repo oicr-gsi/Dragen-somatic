@@ -1,0 +1,206 @@
+[
+{
+        "arguments": {
+            "dragenSomatic.outputFileNamePrefix": "HG008",
+            "dragenSomatic.reference": "hg38",
+            "dragenSomatic.normalInputs": [
+                {
+                    "fastqR1": {
+                        "contents": {
+                            "configuration": "/.mounts/labs/gsi/testdata/dragenSomatic/input_data/HG008-N_Illumina_R1_10M.fastq.gz",
+                            "externalIds": [
+                                {
+                                    "id": "TEST",
+                                    "provider": "TEST"
+                                }
+                            ]
+                        },
+                        "type": "EXTERNAL"
+                    },
+                    "fastqR2": {
+                        "contents": {
+                            "configuration": "/.mounts/labs/gsi/testdata/dragenSomatic/input_data/HG008-N_Illumina_R2_10M.fastq.gz",
+                            "externalIds": [
+                                {
+                                    "id": "TEST",
+                                    "provider": "TEST"
+                                }
+                            ]
+                        },
+                        "type": "EXTERNAL"
+                    },
+                    "readGroup": "ID:HG008-N_01_LB01-01_3_GCGATG-ATCGTG PL:Illumina PU:HG008-N_01_LB01-01 LB:HG008-N_01_LB01-01 SM:HG008-N_01_LB01-01 CM:OICR"
+                }
+            ],
+            "dragenSomatic.tumorInputs": [
+                {
+                    "fastqR1": {
+                        "contents": {
+                            "configuration": "/.mounts/labs/gsi/testdata/dragenSomatic/input_data/HG008-T_Illumina_R1_10M.fastq.gz",
+                            "externalIds": [
+                                {
+                                    "id": "TEST",
+                                    "provider": "TEST"
+                                }
+                            ]
+                        },
+                        "type": "EXTERNAL"
+                    },
+                    "fastqR2": {
+                        "contents": {
+                            "configuration": "/.mounts/labs/gsi/testdata/dragenSomatic/input_data/HG008-T_Illumina_R2_10M.fastq.gz",
+                            "externalIds": [
+                                {
+                                    "id": "TEST",
+                                    "provider": "TEST"
+                                }
+                            ]
+                        },
+                        "type": "EXTERNAL"
+                    },
+                    "readGroup": "ID:HG008-T_01_LB01-01_2_ACTGAG-GCGTCA PL:Illumina PU:HG008-T_01_LB01-01 LB:HG008-T_01_LB01-01 SM:HG008-T_01_LB01-01 CM:OICR"
+                }
+            ],
+            "dragenSomatic.composeNormalList.jobMemory": null,
+            "dragenSomatic.composeNormalList.timeout": null,
+            "dragenSomatic.composeTumorList.jobMemory": null,
+            "dragenSomatic.composeTumorList.timeout": null,
+            "dragenSomatic.extractNormals.jobMemory": null,
+            "dragenSomatic.extractNormals.timeout": null,
+            "dragenSomatic.extractTumors.jobMemory": null,
+            "dragenSomatic.extractTumors.timeout": null,
+            "dragenSomatic.runDragenSomatic.additionalParameters": null,
+            "dragenSomatic.runDragenSomatic.ponVcf": null,
+            "dragenSomatic.runDragenSomatic.timeout": null
+        },
+        "description": "Runs on downsampled HG008 data (DRAGEN testing dataset, Illumina), outputs vcf files with SNV calls.",
+        "engineArguments": {
+            "write_to_cache": false,
+            "read_from_cache": false
+        },
+        "id": "HG008_paired",
+        "metadata": {
+            "dragenSomatic.unfilteredVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "dragenSomatic.filteredVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "dragenSomatic.ploidyVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/dragenSomatic/1.0.0/output_metrics/HG008_paired.metrics",
+                "type": "script"
+            }
+        ]
+    },
+    {
+        "arguments": {
+            "dragenSomatic.outputFileNamePrefix": "HG008",
+            "dragenSomatic.reference": "hg38",
+            "dragenSomatic.normalInputs": null,
+            "dragenSomatic.tumorInputs": [
+                {
+                    "fastqR1": {
+                        "contents": {
+                            "configuration": "/.mounts/labs/gsi/testdata/dragenSomatic/input_data/HG008-T_Illumina_R1_10M.fastq.gz",
+                            "externalIds": [
+                                {
+                                    "id": "TEST",
+                                    "provider": "TEST"
+                                }
+                            ]
+                        },
+                        "type": "EXTERNAL"
+                    },
+                    "fastqR2": {
+                        "contents": {
+                            "configuration": "/.mounts/labs/gsi/testdata/dragenSomatic/input_data/HG008-T_Illumina_R2_10M.fastq.gz",
+                            "externalIds": [
+                                {
+                                    "id": "TEST",
+                                    "provider": "TEST"
+                                }
+                            ]
+                        },
+                        "type": "EXTERNAL"
+                    },
+                    "readGroup": "ID:HG008-T_01_LB01-01_2_ACTGAG-GCGTCA PL:Illumina PU:HG008-T_01_LB01-01 LB:HG008-T_01_LB01-01 SM:HG008-T_01_LB01-01 CM:OICR"
+                }
+            ],
+            "dragenSomatic.composeNormalList.jobMemory": null,
+            "dragenSomatic.composeNormalList.timeout": null,
+            "dragenSomatic.composeTumorList.jobMemory": null,
+            "dragenSomatic.composeTumorList.timeout": null,
+            "dragenSomatic.extractNormals.jobMemory": null,
+            "dragenSomatic.extractNormals.timeout": null,
+            "dragenSomatic.extractTumors.jobMemory": null,
+            "dragenSomatic.extractTumors.timeout": null,
+            "dragenSomatic.runDragenSomatic.additionalParameters": null,
+            "dragenSomatic.runDragenSomatic.ponVcf": null,
+            "dragenSomatic.runDragenSomatic.timeout": null
+        },
+        "description": "Runs on downsampled HG008 data (DRAGEN testing dataset, Illumina), outputs vcf files with SNV calls.",
+        "engineArguments": {
+            "write_to_cache": false,
+            "read_from_cache": false
+        },
+        "id": "HG008_tumoronly",
+        "metadata": {
+            "dragenSomatic.unfilteredVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "dragenSomatic.filteredVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "dragenSomatic.ploidyVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            }
+        },
+        "validators": [
+            {
+                "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
+                "metrics_compare": "@CHECKOUT@/tests/compare.sh",
+                "output_metrics": "/.mounts/labs/gsi/testdata/dragenSomatic/1.0.0/output_metrics/HG008_tumoronly.metrics",
+                "type": "script"
+            }
+        ]
+    }
+
+
+    ]
