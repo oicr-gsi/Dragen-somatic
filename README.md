@@ -53,8 +53,11 @@ Parameter|Value|Default|Description
 Output | Type | Description | Labels
 ---|---|---|---
 `unfilteredVcf`|File|SNV calls before applying any filters|vidarr_label: unfilteredVcf
+`unfilteredIdx`|File|Index for SNV calls before applying any filters|vidarr_label: unfilteredIdx
 `filteredVcf`|File|SNV calls with filter information attached|vidarr_label: filteredVcf
+`filteredIdx`|File|Index for SNV calls with filter information attached|vidarr_label: filteredIdx
 `ploidyVcf`|File?|Ploidy vcf file|vidarr_label: ploidyVcf
+`ploidyIdx`|File?|Index for Ploidy vcf file|vidarr_label: ploidyIdx
 
 
 ## Commands

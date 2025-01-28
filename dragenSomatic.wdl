@@ -49,13 +49,25 @@ workflow dragenSomatic {
             description: "SNV calls before applying any filters",
             vidarr_label: "unfilteredVcf"
           },
+          unfilteredIdx: {
+            description: "Index for SNV calls before applying any filters",
+            vidarr_label: "unfilteredIdx"
+          },
           filteredVcf: {
             description: "SNV calls with filter information attached",
             vidarr_label: "filteredVcf"
           },
+          filteredIdx: {
+            description: "Index for SNV calls with filter information attached",
+            vidarr_label: "filteredIdx"
+          },
           ploidyVcf: {
             description: "Ploidy vcf file",
             vidarr_label: "ploidyVcf"
+          },
+          ploidyIdx: {
+            description: "Index for Ploidy vcf file",
+            vidarr_label: "ploidyIdx"
           }
         }
     }
@@ -101,8 +113,11 @@ workflow dragenSomatic {
 
     output {
         File unfilteredVcf = runDragenSomatic.outputVcf
+        File unfilteredIdx = runDragenSomatic.outputIdx
         File filteredVcf = runDragenSomatic.hardfilteredVcf
+        File filteredIdx = runDragenSomatic.hardfilteredIdx
         File? ploidyVcf = runDragenSomatic.ploidyVcf
+        File? ploidyIdx = runDragenSomatic.ploidyIdx
     }
 }
 
@@ -273,15 +288,21 @@ task runDragenSomatic {
     
     output {
         File outputVcf = "~{resultVcf}"
+        File outputIdx = "~{resultVcf}.tbi"
         File hardfilteredVcf = "~{hardfilteredVcfName}"
+        File hardfilteredIdx = "~{hardfilteredVcfName}.tbi"
         File? ploidyVcf = "~{ploidyVcfName}"
+        File? ploidyIdx = "~{ploidyVcfName}.tbi"
     }
 
     meta {
         output_meta: {
             outputVcf: "output unfiltered vcf with SNV calls",
+            outputIdx: "index of unfiltered vcf with SNV calls",
             hardfilteredVcf: "Hard-filtered vcf file with variants with filter info attached",
-            ploidyVcf: "Ploidy vcf"
+            hardfilteredIdx: "Index of Hard-filtered vcf file with variants with filter info attached",
+            ploidyVcf: "Ploidy vcf",
+            ploidyIdx: "Index of Ploidy vcf"
         }
     }
 

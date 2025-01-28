@@ -88,6 +88,14 @@
                 ],
                 "type": "ALL"
             },
+            "dragenSomatic.unfilteredIdx": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
             "dragenSomatic.filteredVcf": {
                 "contents": [
                     {
@@ -96,7 +104,23 @@
                 ],
                 "type": "ALL"
             },
+            "dragenSomatic.filteredIdx": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
             "dragenSomatic.ploidyVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "dragenSomatic.ploidyIdx": {
                 "contents": [
                     {
                         "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_paired_@JENKINSID@"
@@ -175,6 +199,14 @@
                 ],
                 "type": "ALL"
             },
+            "dragenSomatic.unfilteredIdx": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
             "dragenSomatic.filteredVcf": {
                 "contents": [
                     {
@@ -183,7 +215,23 @@
                 ],
                 "type": "ALL"
             },
+            "dragenSomatic.filteredIdx": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
             "dragenSomatic.ploidyVcf": {
+                "contents": [
+                    {
+                        "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
+                    }
+                ],
+                "type": "ALL"
+            },
+            "dragenSomatic.ploidyIdx": {
                 "contents": [
                     {
                         "outputDirectory": "@SCRATCH@/@DATE@_Workflow_dragenSomatic_HG008_tumoronly_@JENKINSID@"
