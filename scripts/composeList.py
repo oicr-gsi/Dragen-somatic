@@ -11,7 +11,9 @@ parser.add_argument('-i', '--input', help='input json string', required=True)
 args = parser.parse_args()
 
 '''Below are the lines to use in the wdl'''
-inputData = json.loads(args.input)
+with open(args.input, "r") as ji:
+    inputData = json.load(ji)
+ji.close()
 
 try:
     myPattern = r'\S+?\:\S+'
