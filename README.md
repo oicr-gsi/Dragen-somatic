@@ -6,12 +6,14 @@ A workflow for calling SNVs on tumor-only or tumor-normal inputs in somatic mode
 
 ## Dependencies
 
-* [gsi hg38 modules : hg38-dbsnp 138](https://gitlab.oicr.on.ca/ResearchIT/modulator)
+* [gsi hg38 modules : hg38-dbsnp 151](https://gitlab.oicr.on.ca/ResearchIT/modulator)
+* [gsi modules : dragen-scripts 0.1](https://gitlab.oicr.on.ca/ResearchIT/modulator)
 
 
 ## Usage
 
 ### Cromwell
+
 ```
 java -jar cromwell.jar run dragenSomatic.wdl --inputs inputs.json
 ```
@@ -35,14 +37,22 @@ Parameter|Value|Default|Description
 #### Optional task parameters:
 Parameter|Value|Default|Description
 ---|---|---|---
+`extractNormals.parsingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/composeList.py"|Script for parsing inputs into a line
 `extractNormals.timeout`|Int|4|Timeout for the job
 `extractNormals.jobMemory`|Int|4|Job allocated RAM
-`extractTumors.timeout`|Int|4|Timeout for the job
-`extractTumors.jobMemory`|Int|4|Job allocated RAM
-`composeTumorList.jobMemory`|Int|4|Job allocated RAM
-`composeTumorList.timeout`|Int|4|Timeout for the job
+`extractNormals.modules`|String|"dragen-scripts/0.1"|dependency modules
+`composeNormalList.listWritingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/writeFile.py"|Script for writing out list of inputs
 `composeNormalList.jobMemory`|Int|4|Job allocated RAM
 `composeNormalList.timeout`|Int|4|Timeout for the job
+`composeNormalList.modules`|String|"dragen-scripts/0.1"|dependency modules
+`extractTumors.parsingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/composeList.py"|Script for parsing inputs into a line
+`extractTumors.timeout`|Int|4|Timeout for the job
+`extractTumors.jobMemory`|Int|4|Job allocated RAM
+`extractTumors.modules`|String|"dragen-scripts/0.1"|dependency modules
+`composeTumorList.listWritingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/writeFile.py"|Script for writing out list of inputs
+`composeTumorList.jobMemory`|Int|4|Job allocated RAM
+`composeTumorList.timeout`|Int|4|Timeout for the job
+`composeTumorList.modules`|String|"dragen-scripts/0.1"|dependency modules
 `runDragenSomatic.ponVcf`|String?|None|Optional path to panel of Normals (VCF) for filtering SNVs occuring in normal tissue
 `runDragenSomatic.additionalParameters`|String?|None|Additional dragen parameters
 `runDragenSomatic.timeout`|Int|96|Hours before task timeout
@@ -71,53 +81,18 @@ all reads using input fastq files, calling SNVs after that. It applies a number 
 filters and adds annotations from dbSNP database, if available 
  
 ### Extracting information from RG line
+
+```
+     python3 ~{parsingScript} -i ~{write_json(fastqInput)}
+```
+
+### Composing a list of inputs 
  
 ```
-     python3<<CODE
-     import json
-     import re
-     jsonInput = "~{write_json(fastqInput)}"
-     with open(jsonInput, "r") as ji:
-         inputData = json.load(ji)
-     ji.close()
- 
-     try:
-         myPattern = r'\S+?\:\S+'
-         rgs = re.findall(myPattern, inputData['readGroup'])
-         for rgroup in rgs:
-             if rgroup.startswith("ID:"):
-                 RGID = rgroup.split(":")[1]
-                 Lane = rgroup.split("_")[-2]
-             if rgroup.startswith("SM:"):
-                 RGSM = rgroup.split(":")[1]
-             if rgroup.startswith("LB:"):
-                 RGLB = rgroup.split(":")[1]
-         fastqR1 = inputData['fastqR1']
-         fastqR2 = inputData['fastqR2']
-         myResult = ",".join([RGID, RGSM, RGLB, Lane, fastqR1, fastqR2])
-         print(myResult)
-     except:
-         print("Error parsing string")
-     CODE 
+    python3 ~{listWritingScript} -o ~{outputFileName} -l "~{sep=';' inputLines}"
 ```
-### Composing input lists
- 
-```
-    python3<<CODE
-    l = "~{sep=' ' inputLines}"
-    inLines = l.split()
-    linesToPrint = ["RGID,RGSM,RGLB,Lane,Read1File,Read2File\n"]
-    for inputString in inLines:
-        inputString.rstrip()
-        if not inputString.startswith("Error"):
-            linesToPrint.append(inputString + "\n")
- 
-    with open("~{outputFileName}", "w") as tl:
-        tl.writelines(linesToPrint)
-    tl.close() 
-    CODE
-```
-### Running SNV caller
+
+### Running dragen SNV caller in somatic mode
  
 ```
        dragen -f -r ~{refDir} \

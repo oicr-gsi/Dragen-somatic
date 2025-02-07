@@ -9,6 +9,7 @@ struct InputGroup {
 struct GenomeResources {
     String dbSNP
     String referenceDirectory
+    String dragenVersion
 }
 
 workflow dragenSomatic {
@@ -29,11 +30,13 @@ workflow dragenSomatic {
     Map[String,GenomeResources] dragen_resources_by_genome = { 
     "hg38": {
       "dbSNP": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/dbSNP.151/common_all_dbSNP151_hg38p7_sorted.vcf.gz",
-      "referenceDirectory": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/hg38fa.p12/"
+      "referenceDirectory": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/hg38fa.p12/",
+      "dragenVersion": "4.2.4"
     }}
 
     String dragen_ref = dragen_resources_by_genome [ reference ].referenceDirectory
     String dragen_dbsnp = dragen_resources_by_genome [ reference ].dbSNP
+    String dragen_version = dragen_resources_by_genome [ reference ].dragenVersion
 
     meta {
         author: "Peter Ruzanov"
@@ -42,6 +45,10 @@ workflow dragenSomatic {
         dependencies: [
         {
           name: "gsi hg38 modules : hg38-dbsnp/151",
+          url: "https://gitlab.oicr.on.ca/ResearchIT/modulator"
+        },
+        {
+          name: "gsi modules : dragen-scripts/0.1",
           url: "https://gitlab.oicr.on.ca/ResearchIT/modulator"
         }]
         output_meta: {
@@ -108,7 +115,8 @@ workflow dragenSomatic {
         normalFastqList =  composeNormalList.inputList,
         refDir = dragen_ref,
         dbSNP = dragen_dbsnp,
-        outputFileNamePrefix = outputFileNamePrefix
+        outputFileNamePrefix = outputFileNamePrefix,
+        dragenVersion = dragen_version
     } 
 
     output {
@@ -127,47 +135,27 @@ workflow dragenSomatic {
 task extractInfoLine {
    input {
        InputGroup fastqInput
+       String parsingScript = "$DRAGEN_SCRIPTS_ROOT/bin/composeList.py"
        Int timeout = 4
        Int jobMemory = 4
+       String modules = "dragen-scripts/0.1"
    }
 
    parameter_meta {
      fastqInput: "InputGroup struct entry with fastq files"
+     parsingScript: "Script for parsing inputs into a line"
      timeout: "Timeout for the job"
      jobMemory: "Job allocated RAM"
+     modules: "dependency modules"
    }
 
    command <<<
-    python3<<CODE
-    import json
-    import re
-    jsonInput = "~{write_json(fastqInput)}"
-    with open(jsonInput, "r") as ji:
-        inputData = json.load(ji)
-    ji.close()
-
-    try:
-        myPattern = r'\S+?\:\S+'
-        rgs = re.findall(myPattern, inputData['readGroup'])
-        for rgroup in rgs:
-            if rgroup.startswith("ID:"):
-                RGID = rgroup.split(":")[1]
-                Lane = rgroup.split("_")[-2]
-            if rgroup.startswith("SM:"):
-                RGSM = rgroup.split(":")[1]
-            if rgroup.startswith("LB:"):
-                RGLB = rgroup.split(":")[1]
-        fastqR1 = inputData['fastqR1']
-        fastqR2 = inputData['fastqR2']
-        myResult = ",".join([RGID, RGSM, RGLB, Lane, fastqR1, fastqR2])
-        print(myResult)
-    except:
-        print("Error parsing string")
-    CODE 
+    python3 ~{parsingScript} -i ~{write_json(fastqInput)}
    >>>
 
    runtime {
      timeout: "~{timeout}"
+     modules: "~{modules}"
      memory:  "~{jobMemory} GB"
    }
 
@@ -188,37 +176,30 @@ task extractInfoLine {
 task composeList {
    input  {
       Array[String] inputLines
+      String listWritingScript = "$DRAGEN_SCRIPTS_ROOT/bin/writeFile.py"
       String outputFileName
       Int jobMemory = 4
       Int timeout = 4
+      String modules = "dragen-scripts/0.1"
    }
 
    parameter_meta {
      inputLines: "Array of input lines to print"
+     listWritingScript: "Script for writing out list of inputs"
      outputFileName: "Name of an output file, list of inputs"
      jobMemory: "Job allocated RAM"
      timeout: "Timeout for the job"
+     modules: "dependency modules"
    }
 
    command<<<
-   python3<<CODE
-   l = "~{sep=' ' inputLines}"
-   inLines = l.split()
-   linesToPrint = ["RGID,RGSM,RGLB,Lane,Read1File,Read2File\n"]
-   for inputString in inLines:
-       inputString.rstrip()
-       if not inputString.startswith("Error"):
-           linesToPrint.append(inputString + "\n")
-
-   with open("~{outputFileName}", "w") as tl:
-       tl.writelines(linesToPrint)
-   tl.close() 
-   CODE
+   python3 ~{listWritingScript} -o ~{outputFileName} -l "~{sep=';' inputLines}"
    >>>
    
 
    runtime {
       timeout: "~{timeout}"
+      modules: "~{modules}"
       memory:  "~{jobMemory} GB"
    }
 
@@ -251,6 +232,7 @@ task runDragenSomatic {
         File tumorFastqList
         File? normalFastqList
         String refDir
+        String dragenVersion
         String? ponVcf
         String? additionalParameters
         String outputFileNamePrefix
@@ -262,6 +244,7 @@ task runDragenSomatic {
         tumorFastqList: "List of tumor fastq files, required input"
         normalFastqList: "Optional list of normal fastq files for tumor-normal paired analysis"
         refDir: "The reference genome directoty"
+        dragenVersion: "Expected version of dragen software on the DRAGEN node"
         additionalParameters: "Additional dragen parameters"
         dbSNP: "Path to the dbSNP reference file"
         ponVcf: "Optional path to panel of Normals (VCF) for filtering SNVs occuring in normal tissue"
@@ -282,7 +265,8 @@ task runDragenSomatic {
       --output-file-prefix ~{outputFileNamePrefix} ~{additionalParameters}
     >>>
     runtime {
-        backend: "DRAGEN" 
+        backend: "DRAGEN"
+        dragen_version: "~{dragenVersion}"
         timeout: "~{timeout}"
     }
     
