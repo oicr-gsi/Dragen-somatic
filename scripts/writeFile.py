@@ -1,6 +1,6 @@
 """
    Given an array of strings, write into a file formatted
-   for dragenSomatic and dragenGermline
+   for dragenSomatic, dragenGermline or dragenAlign
 """
 import argparse
 import re
@@ -11,7 +11,8 @@ parser.add_argument('-o', '--output', help='output file', required=True)
 args = parser.parse_args()
 
 inLines = re.split(";", args.lanes) if args.lanes else []
-linesToPrint = ["RGID,RGSM,RGLB,Lane,Read1File,Read2File\n"]
+headerTitles = ["RGID", "RGSM", "RGLB", "Lane", "Read1File", "Read2File"]
+linesToPrint = [",".join(headerTitles) + "\n"]
 for inputString in inLines:
     inputString.rstrip()
     if not inputString.startswith("Error"):

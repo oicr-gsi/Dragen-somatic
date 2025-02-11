@@ -1,5 +1,5 @@
 """
-   list composing function to use inside dragenSomatic or dragenGermline workflows
+   list composing function to use inside dragenSomatic, dragenGermline or dragenAlign workflows
 """
 
 import json
@@ -28,7 +28,12 @@ try:
             RGLB = rgroup.split(":")[1]
     fastqR1 = inputData['fastqR1']
     fastqR2 = inputData['fastqR2']
-    myResult = ",".join([RGID, RGSM, RGLB, Lane, fastqR1, fastqR2])
+    myValues = [RGID, RGSM, RGLB, Lane, fastqR1]
+    if fastqR2 is not None:
+        myValues.append(fastqR2)
+    else:
+        myValues.append("")
+    myResult = ",".join(myValues)
     print(myResult)
 except:
     print("Error parsing string")
