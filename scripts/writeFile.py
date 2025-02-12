@@ -11,7 +11,7 @@ parser.add_argument('-o', '--output', help='output file', required=True)
 args = parser.parse_args()
 
 inLines = re.split(";", args.lanes) if args.lanes else []
-headerTitles = ["RGID", "RGSM", "RGLB", "Lane", "Read1File", "Read2File"]
+headerTitles = ["RGID", "RGPU", "RGPL", "RGSM", "RGLB", "Lane", "RGCN", "Read1File", "Read2File"]
 linesToPrint = [",".join(headerTitles) + "\n"]
 for inputString in inLines:
     inputString.rstrip()
