@@ -40,19 +40,19 @@ Parameter|Value|Default|Description
 `extractNormals.parsingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/composeList.py"|Script for parsing inputs into a line
 `extractNormals.timeout`|Int|4|Timeout for the job
 `extractNormals.jobMemory`|Int|4|Job allocated RAM
-`extractNormals.modules`|String|"dragen-scripts/0.1"|dependency modules
+`extractNormals.modules`|String|"dragen-scripts/0.3"|dependency modules
 `composeNormalList.listWritingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/writeFile.py"|Script for writing out list of inputs
 `composeNormalList.jobMemory`|Int|4|Job allocated RAM
 `composeNormalList.timeout`|Int|4|Timeout for the job
-`composeNormalList.modules`|String|"dragen-scripts/0.1"|dependency modules
+`composeNormalList.modules`|String|"dragen-scripts/0.3"|dependency modules
 `extractTumors.parsingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/composeList.py"|Script for parsing inputs into a line
 `extractTumors.timeout`|Int|4|Timeout for the job
 `extractTumors.jobMemory`|Int|4|Job allocated RAM
-`extractTumors.modules`|String|"dragen-scripts/0.1"|dependency modules
+`extractTumors.modules`|String|"dragen-scripts/0.3"|dependency modules
 `composeTumorList.listWritingScript`|String|"$DRAGEN_SCRIPTS_ROOT/bin/writeFile.py"|Script for writing out list of inputs
 `composeTumorList.jobMemory`|Int|4|Job allocated RAM
 `composeTumorList.timeout`|Int|4|Timeout for the job
-`composeTumorList.modules`|String|"dragen-scripts/0.1"|dependency modules
+`composeTumorList.modules`|String|"dragen-scripts/0.3"|dependency modules
 `runDragenSomatic.ponVcf`|String?|None|Optional path to panel of Normals (VCF) for filtering SNVs occuring in normal tissue
 `runDragenSomatic.additionalParameters`|String?|None|Additional dragen parameters
 `runDragenSomatic.timeout`|Int|96|Hours before task timeout
