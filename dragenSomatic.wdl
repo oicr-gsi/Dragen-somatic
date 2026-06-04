@@ -32,6 +32,11 @@ workflow dragenSomatic {
       "dbSNP": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/dbSNP.151/common_all_dbSNP151_hg38p7_sorted.vcf.gz",
       "referenceDirectory": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/hg38fa.p12/",
       "dragenVersion": "4.2.4"
+    },
+    "hg38_noAlt": {
+      "dbSNP": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/dbSNP.151/common_all_dbSNP151_hg38p7_noalt_sorted.vcf.gz",
+      "referenceDirectory": "/.mounts/labs/gsiprojects/gsi/Dragen/reference/hg38_noAlt-p12/",
+      "dragenVersion": "4.2.4"
     }}
 
     String dragen_ref = dragen_resources_by_genome [ reference ].referenceDirectory
